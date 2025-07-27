@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Moon, Sun, Search, Settings, Bell, ChevronDown, Circle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,51 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { useTheme } from "next-themes"
-
-const users = [
-  {
-    id: 1,
-    name: "Sarah Chen",
-    email: "sarah@company.com",
-    avatar: "/placeholder.svg?height=32&width=32",
-    online: true,
-    current: true,
-  },
-  {
-    id: 2,
-    name: "Mike Johnson",
-    email: "mike@company.com",
-    avatar: "/placeholder.svg?height=32&width=32",
-    online: true,
-    current: false,
-  },
-  {
-    id: 3,
-    name: "Emily Davis",
-    email: "emily@company.com",
-    avatar: "/placeholder.svg?height=32&width=32",
-    online: false,
-    current: false,
-  },
-  {
-    id: 4,
-    name: "Alex Rodriguez",
-    email: "alex@company.com",
-    avatar: "/placeholder.svg?height=32&width=32",
-    online: true,
-    current: false,
-  },
-]
+import { DynamicVeltPresence } from './velt-presence-dynamic'
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const [currentUser, setCurrentUser] = useState(users.find((u) => u.current) || users[0])
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
-  const handleUserSwitch = (user: (typeof users)[0]) => {
-    setCurrentUser(user)
-    // Update current user logic here
-  }
+  useEffect(() => {
+    // Get current user from localStorage
+    const userData = localStorage.getItem('velt_user')
+    if (userData) {
+      setCurrentUser(JSON.parse(userData))
+    }
+  }, [])
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light")
@@ -112,91 +80,58 @@ export function Navbar() {
           <Settings className="h-4 w-4" />
         </Button>
 
-        {/* User Avatars Stack (hidden on mobile) */}
-        <div className="hidden lg:flex items-center -space-x-2 mr-2">
-          {users.slice(0, 3).map((user, index) => (
-            <Avatar
-              key={user.id}
-              className={`h-8 w-8 border-2 border-background relative ${index === 0 ? "z-30" : index === 1 ? "z-20" : "z-10"}`}
-            >
-              <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-              <AvatarFallback className="text-xs">
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-              {user.online && (
-                <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-500 text-green-500 border border-background" />
-              )}
-            </Avatar>
-          ))}
-          {users.length > 3 && (
-            <div className="h-8 w-8 rounded-full bg-muted border-2 border-background flex items-center justify-center text-xs font-medium z-0">
-              +{users.length - 3}
-            </div>
-          )}
+        {/* Velt Presence Component - Shows online users */}
+        <div className="hidden lg:flex items-center mr-2">
+          <DynamicVeltPresence />
         </div>
 
         {/* Current User Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-9 px-2 flex items-center space-x-2">
-              <Avatar className="h-7 w-7 relative">
-                <AvatarImage src={currentUser.avatar || "/placeholder.svg"} alt={currentUser.name} />
-                <AvatarFallback className="text-xs">
-                  {currentUser.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-                {currentUser.online && (
-                  <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-500 text-green-500 border border-background" />
-                )}
-              </Avatar>
-              <ChevronDown className="h-4 w-4 hidden sm:block" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64">
-            <div className="px-2 py-1.5">
-              <p className="text-sm font-medium">Switch User</p>
-              <p className="text-xs text-muted-foreground">Currently signed in as {currentUser.name}</p>
-            </div>
-            <DropdownMenuSeparator />
-            {users.map((user) => (
-              <DropdownMenuItem
-                key={user.id}
-                onClick={() => handleUserSwitch(user)}
-                className={`flex items-center space-x-3 p-3 ${user.id === currentUser.id ? "bg-accent" : ""}`}
-              >
-                <Avatar className="h-8 w-8 relative">
-                  <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+        {currentUser && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-9 px-2 flex items-center space-x-2">
+                <Avatar className="h-7 w-7 relative">
+                  <AvatarImage src={currentUser.photoUrl || "/placeholder.svg"} alt={currentUser.name} />
                   <AvatarFallback className="text-xs">
-                    {user.name
+                    {currentUser.name
                       .split(" ")
-                      .map((n) => n[0])
+                      .map((n: string) => n[0])
                       .join("")}
                   </AvatarFallback>
-                  {user.online && (
-                    <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-500 text-green-500 border border-background" />
-                  )}
+                  <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-500 text-green-500 border border-background" />
+                </Avatar>
+                <ChevronDown className="h-4 w-4 hidden sm:block" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <div className="px-2 py-1.5">
+                <p className="text-sm font-medium">Current User</p>
+                <p className="text-xs text-muted-foreground">Signed in as {currentUser.name}</p>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex items-center space-x-3 p-3">
+                <Avatar className="h-8 w-8 relative">
+                  <AvatarImage src={currentUser.photoUrl || "/placeholder.svg"} alt={currentUser.name} />
+                  <AvatarFallback className="text-xs">
+                    {currentUser.name
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                  <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-green-500 text-green-500 border border-background" />
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{user.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                  <p className="text-sm font-medium truncate">{currentUser.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{currentUser.email}</p>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Circle
-                    className={`h-2 w-2 ${user.online ? "fill-green-500 text-green-500" : "fill-gray-400 text-gray-400"}`}
-                  />
-                  <span className="text-xs text-muted-foreground hidden sm:inline">
-                    {user.online ? "Online" : "Offline"}
-                  </span>
+                  <Circle className="h-2 w-2 fill-green-500 text-green-500" />
+                  <span className="text-xs text-muted-foreground hidden sm:inline">Online</span>
                 </div>
               </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </nav>
   )
