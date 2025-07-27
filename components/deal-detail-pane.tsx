@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { useState, useEffect } from "react"
+import { DynamicVeltCommentTool } from "./velt-comments-dynamic"
 
 interface DealDetailPaneProps {
   deal: any
@@ -179,10 +180,9 @@ export function DealDetailPane({ deal, onClose }: DealDetailPaneProps) {
       {/* Footer Actions */}
       <div className="border-t p-4">
         <div className="flex space-x-2">
-          <Button size="sm" className="flex-1">
-            <MessageSquare className="h-4 w-4 mr-2" />
-            Add Comment
-          </Button>
+          <div className="flex-1">
+            <DynamicVeltCommentTool />
+          </div>
           <Button size="sm" variant="outline">
             <Paperclip className="h-4 w-4" />
           </Button>
