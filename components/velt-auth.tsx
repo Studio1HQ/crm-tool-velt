@@ -3,6 +3,7 @@
 import { useVeltClient } from '@veltdev/react'
 import { useEffect } from 'react'
 import { getOrCreateUser } from '@/lib/user-manager'
+import { DynamicVeltCursor } from './velt-cursor-dynamic'
 
 export function VeltAuth() {
   const { client } = useVeltClient()
@@ -22,5 +23,5 @@ export function VeltAuth() {
     })
   }, [client])
 
-  return null
+  return <DynamicVeltCursor />
 }
