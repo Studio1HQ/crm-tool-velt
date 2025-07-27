@@ -15,18 +15,19 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { useTheme } from "next-themes"
 import { DynamicVeltPresence } from './velt-presence-dynamic'
+import { getOrCreateUser } from '@/lib/user-manager'
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<any>(() => getOrCreateUser())
 
   useEffect(() => {
-    // Get current user from localStorage
-    const userData = localStorage.getItem('velt_user')
-    if (userData) {
-      setCurrentUser(JSON.parse(userData))
+    // Ensure user is set if state initialization failed
+    if (!currentUser) {
+      const user = getOrCreateUser()
+      setCurrentUser(user)
     }
-  }, [])
+  }, [currentUser])
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light")
@@ -81,7 +82,7 @@ export function Navbar() {
         </Button>
 
         {/* Velt Presence Component - Shows online users */}
-        <div className="hidden lg:flex items-center mr-2">
+        <div className="flex items-center mr-2 min-w-[80px]">
           <DynamicVeltPresence />
         </div>
 
