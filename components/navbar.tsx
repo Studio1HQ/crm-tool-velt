@@ -16,11 +16,12 @@ import { Badge } from "@/components/ui/badge"
 import { useTheme } from "next-themes"
 import { DynamicVeltPresence } from './velt-presence-dynamic'
 import { DynamicVeltSidebarButton } from './velt-comments-dynamic'
-import { getOrCreateUser } from '@/lib/user-manager'
+import { getOrCreateUser, switchUser, getAvailableUsers } from '@/lib/user-manager'
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
   const [currentUser, setCurrentUser] = useState<any>(() => getOrCreateUser())
+  const [availableUsers, setAvailableUsers] = useState<any[]>([])
 
   useEffect(() => {
     // Ensure user is set if state initialization failed
@@ -28,7 +29,27 @@ export function Navbar() {
       const user = getOrCreateUser()
       setCurrentUser(user)
     }
+    
+    // Get available users for switching
+    const users = getAvailableUsers()
+    setAvailableUsers(users)
   }, [currentUser])
+
+  const handleUserSwitch = async () => {
+    const newUser = switchUser()
+    if (newUser) {
+      setCurrentUser(newUser)
+      // Update available users list
+      const users = getAvailableUsers()
+      setAvailableUsers(users)
+      
+      // Small delay to ensure state is updated
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      // Trigger Velt user switch event
+      window.dispatchEvent(new CustomEvent('velt-user-switch'))
+    }
+  }
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light")
@@ -112,10 +133,15 @@ export function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-64">
               <div className="px-2 py-1.5">
-                <p className="text-sm font-medium">Current User</p>
-                <p className="text-xs text-muted-foreground">Signed in as {currentUser.name}</p>
+                <p className="text-sm font-medium">User Switching</p>
+                <p className="text-xs text-muted-foreground">Switch between users</p>
               </div>
               <DropdownMenuSeparator />
+              
+              {/* Current User */}
+              <div className="px-2 py-1">
+                <p className="text-xs font-medium text-muted-foreground mb-1">Current User</p>
+              </div>
               <DropdownMenuItem className="flex items-center space-x-3 p-3">
                 <Avatar className="h-8 w-8 relative">
                   <AvatarImage src={currentUser.photoUrl || "/placeholder.svg"} alt={currentUser.name} />
@@ -133,9 +159,41 @@ export function Navbar() {
                 </div>
                 <div className="flex items-center space-x-1">
                   <Circle className="h-2 w-2 fill-green-500 text-green-500" />
-                  <span className="text-xs text-muted-foreground hidden sm:inline">Online</span>
+                  <span className="text-xs text-muted-foreground hidden sm:inline">Active</span>
                 </div>
               </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+              
+              {/* Switch to Another User */}
+              <div className="px-2 py-1">
+                <p className="text-xs font-medium text-muted-foreground mb-1">Switch User</p>
+              </div>
+              {availableUsers.length > 1 && (
+                <DropdownMenuItem 
+                  className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-accent"
+                  onClick={handleUserSwitch}
+                >
+                  <Avatar className="h-8 w-8 relative">
+                    <AvatarImage src={availableUsers[1].photoUrl || "/placeholder.svg"} alt={availableUsers[1].name} />
+                    <AvatarFallback className="text-xs">
+                      {availableUsers[1].name
+                        .split(" ")
+                        .map((n: string) => n[0])
+                        .join("")}
+                    </AvatarFallback>
+                    <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-gray-400 text-gray-400 border border-background" />
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{availableUsers[1].name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{availableUsers[1].email}</p>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Circle className="h-2 w-2 fill-gray-400 text-gray-400" />
+                    <span className="text-xs text-muted-foreground hidden sm:inline">Switch</span>
+                  </div>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         )}

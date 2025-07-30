@@ -12,7 +12,7 @@ const generateRandomUser = () => {
 
   const randomName = names[Math.floor(Math.random() * names.length)]
   const randomCompany = companies[Math.floor(Math.random() * companies.length)]
-  const userId = `user_${Math.random().toString(36).substr(2, 9)}`
+  const userId = `user_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
   
   return {
     userId,
@@ -42,4 +42,22 @@ export const getCurrentUser = () => {
 
 export const getOrCreateUser = () => {
   return getCurrentUser()
+}
+
+export const switchUser = () => {
+  if (typeof window === 'undefined') return null
+  
+  const newUser = generateRandomUser()
+  localStorage.setItem('velt_user', JSON.stringify(newUser))
+  
+  return newUser
+}
+
+export const getAvailableUsers = () => {
+  const currentUser = getCurrentUser()
+  if (!currentUser) return []
+  
+  const switchUser = generateRandomUser()
+  
+  return [currentUser, switchUser]
 }
