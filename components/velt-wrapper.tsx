@@ -8,8 +8,15 @@ interface VeltWrapperProps {
 }
 
 export function VeltWrapper({ children }: VeltWrapperProps) {
+  const apiKey = process.env.NEXT_PUBLIC_VELT_API_KEY
+  
+  if (!apiKey) {
+    console.error('NEXT_PUBLIC_VELT_API_KEY is not set')
+    return <>{children}</>
+  }
+
   return (
-    <VeltProvider apiKey={process.env.NEXT_PUBLIC_VELT_API_KEY!}>
+    <VeltProvider apiKey={apiKey}>
       {children}
     </VeltProvider>
   )

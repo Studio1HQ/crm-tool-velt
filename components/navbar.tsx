@@ -20,20 +20,18 @@ import { getOrCreateUser, switchUser, getAvailableUsers } from '@/lib/user-manag
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const [currentUser, setCurrentUser] = useState<any>(() => getOrCreateUser())
+  const [currentUser, setCurrentUser] = useState<any>(null)
   const [availableUsers, setAvailableUsers] = useState<any[]>([])
 
   useEffect(() => {
-    // Ensure user is set if state initialization failed
-    if (!currentUser) {
-      const user = getOrCreateUser()
-      setCurrentUser(user)
-    }
+    // Initialize user on client side only
+    const user = getOrCreateUser()
+    setCurrentUser(user)
     
     // Get available users for switching
     const users = getAvailableUsers()
     setAvailableUsers(users)
-  }, [currentUser])
+  }, [])
 
   const handleUserSwitch = async () => {
     const newUser = switchUser()
