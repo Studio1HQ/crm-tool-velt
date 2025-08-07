@@ -17,6 +17,7 @@ import { useTheme } from "next-themes"
 import { DynamicVeltPresence } from './velt-presence-dynamic'
 import { DynamicVeltSidebarButton } from './velt-comments-dynamic'
 import { getOrCreateUser, switchUser, getAvailableUsers } from '@/lib/user-manager'
+import { VeltNotificationsTool } from "@veltdev/react"
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -92,8 +93,7 @@ export function Navbar() {
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="h-9 w-9 relative hidden sm:flex">
-          <Bell className="h-4 w-4" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">3</Badge>
+          <VeltNotificationsTool />
         </Button>
 
         {/* Comments Sidebar */}
