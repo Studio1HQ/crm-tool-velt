@@ -3,7 +3,6 @@
 import { useVeltClient } from '@veltdev/react'
 import { useEffect, useState, useRef } from 'react'
 import { getOrCreateUser } from '@/lib/user-manager'
-import { DynamicVeltCursor } from './velt-cursor-dynamic'
 import { DynamicVeltComments, DynamicVeltCommentsSidebar } from './velt-comments-dynamic'
 
 export function VeltAuth() {
@@ -66,7 +65,6 @@ export function VeltAuth() {
 
   return (
     <>
-      <DynamicVeltCursor />
       <DynamicVeltComments />
       <DynamicVeltCommentsSidebar />
     </>
