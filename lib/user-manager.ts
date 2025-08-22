@@ -1,43 +1,36 @@
-const generateRandomUser = () => {
-  const names = [
-    'Alex Chen', 'Sarah Johnson', 'Mike Rodriguez', 'Emily Davis', 'Jordan Smith',
-    'Taylor Brown', 'Casey Wilson', 'Morgan Lee', 'Riley Thompson', 'Avery Miller',
-    'Parker Jones', 'Quinn Davis', 'Cameron White', 'Blake Anderson', 'Sage Martinez'
-  ]
-  
-  const companies = [
-    'TechCorp', 'InnovateLab', 'DataFlow Inc', 'CloudSync', 'NexGen Solutions',
-    'DigitalEdge', 'FutureWorks', 'SmartSystems', 'CodeCraft', 'VisionTech'
-  ]
-
-  const randomName = names[Math.floor(Math.random() * names.length)]
-  const randomCompany = companies[Math.floor(Math.random() * companies.length)]
-  const userId = `user_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`
-  
-  return {
-    userId,
-    name: randomName,
-    email: `${randomName.toLowerCase().replace(' ', '.')}@${randomCompany.toLowerCase()}.com`,
+const HARDCODED_USERS = [
+  {
+    userId: 'user_alex_chen',
+    name: 'Alex Chen',
+    email: 'alex.chen@techcorp.com',
     organizationId: 'crm-tool-org',
-    photoUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`
+    photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user_alex_chen'
+  },
+  {
+    userId: 'user_sarah_johnson',
+    name: 'Sarah Johnson',
+    email: 'sarah.johnson@innovatelab.com',
+    organizationId: 'crm-tool-org',
+    photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user_sarah_johnson'
   }
+]
+
+const getCurrentUserIndex = (): number => {
+  if (typeof window === 'undefined') return 0
+  const storedIndex = localStorage.getItem('velt_current_user_index')
+  return storedIndex ? parseInt(storedIndex, 10) : 0
+}
+
+const setCurrentUserIndex = (index: number): void => {
+  if (typeof window === 'undefined') return
+  localStorage.setItem('velt_current_user_index', index.toString())
 }
 
 export const getCurrentUser = () => {
   if (typeof window === 'undefined') return null
   
-  let userData = localStorage.getItem('velt_user')
-  let user
-
-  if (userData) {
-    user = JSON.parse(userData)
-  } else {
-    // Generate new random user and store in localStorage
-    user = generateRandomUser()
-    localStorage.setItem('velt_user', JSON.stringify(user))
-  }
-
-  return user
+  const currentIndex = getCurrentUserIndex()
+  return HARDCODED_USERS[currentIndex]
 }
 
 export const getOrCreateUser = () => {
@@ -47,17 +40,13 @@ export const getOrCreateUser = () => {
 export const switchUser = () => {
   if (typeof window === 'undefined') return null
   
-  const newUser = generateRandomUser()
-  localStorage.setItem('velt_user', JSON.stringify(newUser))
+  const currentIndex = getCurrentUserIndex()
+  const newIndex = currentIndex === 0 ? 1 : 0
+  setCurrentUserIndex(newIndex)
   
-  return newUser
+  return HARDCODED_USERS[newIndex]
 }
 
 export const getAvailableUsers = () => {
-  const currentUser = getCurrentUser()
-  if (!currentUser) return []
-  
-  const switchUser = generateRandomUser()
-  
-  return [currentUser, switchUser]
+  return HARDCODED_USERS
 }
