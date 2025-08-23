@@ -180,9 +180,6 @@ export function DealDetailPane({ deal, onClose }: DealDetailPaneProps) {
       {/* Footer Actions */}
       <div className="border-t p-4">
         <div className="flex space-x-2">
-          <div className="flex-1">
-            <DynamicVeltCommentTool />
-          </div>
           <Button size="sm" variant="outline">
             <Paperclip className="h-4 w-4" />
           </Button>

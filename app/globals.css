@@ -84,3 +84,60 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* Velt Comment Theming */
+.velt-comments-sidebar,
+.velt-comment-dialog,
+.velt-comment-tool,
+.velt-comment-bubble,
+.velt-popover {
+  --velt-primary-color: hsl(var(--primary));
+  --velt-background-color: hsl(var(--background));
+  --velt-surface-color: hsl(var(--card));
+  --velt-text-primary-color: hsl(var(--foreground));
+  --velt-text-secondary-color: hsl(var(--muted-foreground));
+  --velt-border-color: hsl(var(--border));
+  --velt-accent-color: hsl(var(--accent));
+}
+
+/* Dark mode specific overrides for Velt */
+.dark .velt-comments-sidebar,
+.dark .velt-comment-dialog,
+.dark .velt-comment-tool,
+.dark .velt-comment-bubble,
+.dark .velt-popover {
+  --velt-primary-color: hsl(var(--primary));
+  --velt-background-color: hsl(var(--background));
+  --velt-surface-color: hsl(var(--card));
+  --velt-text-primary-color: hsl(var(--foreground));
+  --velt-text-secondary-color: hsl(var(--muted-foreground));
+  --velt-border-color: hsl(var(--border));
+  --velt-accent-color: hsl(var(--accent));
+}
+
+/* Style comment tools and bubbles in table rows */
+.velt-comment-tool,
+.velt-comment-bubble {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+/* Ensure comment tools are clickable and visible */
+.velt-comment-tool button,
+.velt-comment-bubble {
+  background: transparent !important;
+  border: none !important;
+  color: hsl(var(--muted-foreground)) !important;
+  cursor: pointer !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+  transition: all 150ms ease !important;
+}
+
+.velt-comment-tool button:hover,
+.velt-comment-bubble:hover {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+}

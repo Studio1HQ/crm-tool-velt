@@ -2,6 +2,7 @@
 
 import { VeltProvider } from '@veltdev/react'
 import React from 'react'
+import { useTheme } from 'next-themes'
 
 interface VeltWrapperProps {
   children: React.ReactNode
@@ -9,6 +10,7 @@ interface VeltWrapperProps {
 
 export function VeltWrapper({ children }: VeltWrapperProps) {
   const apiKey = process.env.NEXT_PUBLIC_VELT_API_KEY
+  const { theme } = useTheme()
   
   if (!apiKey) {
     console.error('NEXT_PUBLIC_VELT_API_KEY is not set')
@@ -16,7 +18,12 @@ export function VeltWrapper({ children }: VeltWrapperProps) {
   }
 
   return (
-    <VeltProvider apiKey={apiKey}>
+    <VeltProvider 
+      apiKey={apiKey}
+      config={{
+        darkMode: theme === 'dark'
+      }}
+    >
       {children}
     </VeltProvider>
   )

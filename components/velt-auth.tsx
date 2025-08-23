@@ -65,7 +65,7 @@ export function VeltAuth() {
 
   return (
     <>
-      <DynamicVeltComments />
+      <DynamicVeltComments popoverMode={true} />
       <DynamicVeltCommentsSidebar />
     </>
   )

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MessageSquare, Plus, Settings, Download, ChevronDown, Sparkles, Filter } from "lucide-react"
+import { Plus, Settings, Download, ChevronDown, Sparkles, Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
+import { DynamicVeltCommentTool, DynamicVeltCommentBubble } from './velt-comments-dynamic'
 
 interface MainTableProps {
   onSelectDeal: (deal: any) => void
@@ -29,8 +30,6 @@ const companies = [
     estimatedArr: "$100M-$250M",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
-    hasComments: true,
-    commentCount: 3,
   },
   {
     id: 2,
@@ -43,8 +42,6 @@ const companies = [
     estimatedArr: "$500M-$1B",
     connectionStrength: "Strong",
     connectionColor: "text-green-500",
-    hasComments: false,
-    commentCount: 0,
   },
   {
     id: 3,
@@ -57,8 +54,6 @@ const companies = [
     estimatedArr: "$1B-$10B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
-    hasComments: true,
-    commentCount: 1,
   },
   {
     id: 4,
@@ -71,8 +66,6 @@ const companies = [
     estimatedArr: "$1B-$10B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
-    hasComments: false,
-    commentCount: 0,
   },
   {
     id: 5,
@@ -85,8 +78,6 @@ const companies = [
     estimatedArr: "$500M-$1B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
-    hasComments: true,
-    commentCount: 2,
   },
 ]
 
@@ -200,6 +191,8 @@ export function MainTable({ onSelectDeal }: MainTableProps) {
                   key={company.id}
                   className="hover:bg-muted/50 cursor-pointer group"
                   onClick={() => onSelectDeal(company)}
+                  data-velt-target-comment-element-id={`company-${company.id}`}
+                  id={`company-${company.id}`}
                 >
                   <TableCell>
                     <Checkbox
@@ -241,12 +234,15 @@ export function MainTable({ onSelectDeal }: MainTableProps) {
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Badge className={cn("font-medium", company.icpColor)}>{company.icpFit}</Badge>
-                      {company.hasComments && (
-                        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MessageSquare className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{company.commentCount}</span>
-                        </div>
-                      )}
+                      <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <DynamicVeltCommentTool
+                          targetElementId={`company-${company.id}`}
+                        />
+                        <DynamicVeltCommentBubble
+                          targetElementId={`company-${company.id}`}
+                          commentCountType="total"
+                        />
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">

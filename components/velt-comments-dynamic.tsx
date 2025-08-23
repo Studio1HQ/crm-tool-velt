@@ -34,9 +34,18 @@ const VeltCommentTool = dynamic(
   }
 )
 
+const VeltCommentBubble = dynamic(
+  () => import('@veltdev/react').then(mod => ({ default: mod.VeltCommentBubble })),
+  {
+    ssr: false,
+    loading: () => null
+  }
+)
+
 export { 
   VeltComments as DynamicVeltComments,
   VeltCommentsSidebar as DynamicVeltCommentsSidebar,
   VeltSidebarButton as DynamicVeltSidebarButton,
-  VeltCommentTool as DynamicVeltCommentTool
+  VeltCommentTool as DynamicVeltCommentTool,
+  VeltCommentBubble as DynamicVeltCommentBubble
 }
