@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { useState, useEffect } from "react"
-import { DynamicVeltCommentTool } from "./velt-comments-dynamic"
 
 interface DealDetailPaneProps {
   deal: any
