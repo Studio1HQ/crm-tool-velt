@@ -2,11 +2,13 @@
 
 import { useVeltClient } from '@veltdev/react'
 import { useEffect, useState, useRef } from 'react'
+import { useTheme } from 'next-themes'
 import { getOrCreateUser } from '@/lib/user-manager'
 import { DynamicVeltComments, DynamicVeltCommentsSidebar } from './velt-comments-dynamic'
 
 export function VeltAuth() {
   const { client } = useVeltClient()
+  const { theme } = useTheme()
   const [userSwitchTrigger, setUserSwitchTrigger] = useState(0)
   const [isInitialized, setIsInitialized] = useState(false)
   const initializationRef = useRef(false)
@@ -36,6 +38,15 @@ export function VeltAuth() {
           documentName: 'CRM Dashboard'
         })
 
+        // Ensure Velt uses the same dark mode as the app
+        try {
+          // client.setDarkMode accepts a boolean
+          await client.setDarkMode?.(theme === 'dark')
+        } catch (e) {
+          // non-fatal
+          console.warn('Failed to set Velt dark mode', e)
+        }
+
         setIsInitialized(true)
       } catch (error) {
         console.error('Velt initialization error:', error)
@@ -57,6 +68,16 @@ export function VeltAuth() {
     window.addEventListener('velt-user-switch', handleUserSwitch)
     return () => window.removeEventListener('velt-user-switch', handleUserSwitch)
   }, [])
+
+  // Keep Velt dark mode in sync when theme changes
+  useEffect(() => {
+    if (!client) return
+    try {
+      client.setDarkMode?.(theme === 'dark')
+    } catch (e) {
+      console.warn('Failed to update Velt dark mode', e)
+    }
+  }, [client, theme])
 
   // Only render Velt components after successful initialization
   if (!isInitialized) {
