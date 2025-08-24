@@ -202,12 +202,17 @@ export function MainTable({ onSelectDeal }: MainTableProps) {
                     />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src={company.logo || "/placeholder.svg"} alt={company.name} />
-                        <AvatarFallback className="text-xs">{company.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium">{company.name}</span>
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage src={company.logo || "/placeholder.svg"} alt={company.name} />
+                          <AvatarFallback className="text-xs">{company.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{company.name}</span>
+                      </div>
+                      <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <DynamicVeltCommentTool targetElementId={`company-${company.id}`} />
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -234,15 +239,6 @@ export function MainTable({ onSelectDeal }: MainTableProps) {
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Badge className={cn("font-medium", company.icpColor)}>{company.icpFit}</Badge>
-                      <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <DynamicVeltCommentTool
-                          targetElementId={`company-${company.id}`}
-                        />
-                        <DynamicVeltCommentBubble
-                          targetElementId={`company-${company.id}`}
-                          commentCountType="total"
-                        />
-                      </div>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
