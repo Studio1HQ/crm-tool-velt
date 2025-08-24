@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { DynamicVeltCommentTool, DynamicVeltCommentBubble } from './velt-comments-dynamic'
+import { DynamicVeltCommentTool } from './velt-comments-dynamic'
 
 interface MainTableProps {
   onSelectDeal: (deal: any) => void
