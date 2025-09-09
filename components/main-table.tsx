@@ -30,6 +30,8 @@ const companies = [
     estimatedArr: "$100M-$250M",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
+    hasComments: true,
+    commentCount: 0,
   },
   {
     id: 2,
@@ -42,6 +44,8 @@ const companies = [
     estimatedArr: "$500M-$1B",
     connectionStrength: "Strong",
     connectionColor: "text-green-500",
+    hasComments: true,
+    commentCount: 0,
   },
   {
     id: 3,
@@ -54,6 +58,8 @@ const companies = [
     estimatedArr: "$1B-$10B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
+    hasComments: false,
+    commentCount: 0,
   },
   {
     id: 4,
@@ -66,6 +72,8 @@ const companies = [
     estimatedArr: "$1B-$10B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
+    hasComments: true,
+    commentCount: 0,
   },
   {
     id: 5,
@@ -78,6 +86,8 @@ const companies = [
     estimatedArr: "$500M-$1B",
     connectionStrength: "Very strong",
     connectionColor: "text-green-600",
+    hasComments: false,
+    commentCount: 0,
   },
 ]
 
@@ -115,6 +125,7 @@ export function MainTable({ onSelectDeal }: MainTableProps) {
               <span className="hidden sm:inline">Import / Export</span>
               <ChevronDown className="h-4 w-4 ml-1" />
             </Button>
+            <DynamicVeltCommentTool />
           </div>
         </div>
 
