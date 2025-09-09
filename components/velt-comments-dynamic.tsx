@@ -32,12 +32,21 @@ const VeltCommentTool = dynamic(
     ssr: false,
     loading: () => null
   }
-)
+);
 
+const VeltInlineCommentsSection = dynamic(
+  () =>
+    import("@veltdev/react").then((mod) => ({ default: mod.VeltInlineCommentsSection })),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
-export { 
+export {
   VeltComments as DynamicVeltComments,
   VeltCommentsSidebar as DynamicVeltCommentsSidebar,
   VeltSidebarButton as DynamicVeltSidebarButton,
   VeltCommentTool as DynamicVeltCommentTool,
-}
+  VeltInlineCommentsSection as DynamicVeltInlineCommentsSection,
+};
