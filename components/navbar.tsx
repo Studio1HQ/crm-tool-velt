@@ -167,31 +167,37 @@ export function Navbar() {
               <div className="px-2 py-1">
                 <p className="text-xs font-medium text-muted-foreground mb-1">Switch User</p>
               </div>
-              {availableUsers.length > 1 && (
-                <DropdownMenuItem 
-                  className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-accent"
-                  onClick={handleUserSwitch}
-                >
-                  <Avatar className="h-8 w-8 relative">
-                    <AvatarImage src={availableUsers[1].photoUrl || "/placeholder.svg"} alt={availableUsers[1].name} />
-                    <AvatarFallback className="text-xs">
-                      {availableUsers[1].name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                    <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-gray-400 text-gray-400 border border-background" />
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{availableUsers[1].name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{availableUsers[1].email}</p>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Circle className="h-2 w-2 fill-gray-400 text-gray-400" />
-                    <span className="text-xs text-muted-foreground hidden sm:inline">Switch</span>
-                  </div>
-                </DropdownMenuItem>
-              )}
+              {availableUsers.length > 1 && (() => {
+                // Find the user that's NOT the current user
+                const otherUser = availableUsers.find(user => user.userId !== currentUser.userId);
+                if (!otherUser) return null;
+                
+                return (
+                  <DropdownMenuItem 
+                    className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-accent"
+                    onClick={handleUserSwitch}
+                  >
+                    <Avatar className="h-8 w-8 relative">
+                      <AvatarImage src={otherUser.photoUrl || "/placeholder.svg"} alt={otherUser.name} />
+                      <AvatarFallback className="text-xs">
+                        {otherUser.name
+                          .split(" ")
+                          .map((n: string) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                      <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-gray-400 text-gray-400 border border-background" />
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{otherUser.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{otherUser.email}</p>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Circle className="h-2 w-2 fill-gray-400 text-gray-400" />
+                      <span className="text-xs text-muted-foreground hidden sm:inline">Switch</span>
+                    </div>
+                  </DropdownMenuItem>
+                );
+              })()}
             </DropdownMenuContent>
           </DropdownMenu>
         )}

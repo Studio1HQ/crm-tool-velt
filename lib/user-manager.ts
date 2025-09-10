@@ -3,14 +3,14 @@ const HARDCODED_USERS = [
     userId: 'user_alex_chen',
     name: 'Alex Chen',
     email: 'alex.chen@techcorp.com',
-    organizationId: 'crm-tool-org',
+    organizationId: 'crm-tool-basepoint-org',
     photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user_alex_chen'
   },
   {
     userId: 'user_sarah_johnson',
     name: 'Sarah Johnson',
     email: 'sarah.johnson@innovatelab.com',
-    organizationId: 'crm-tool-org',
+    organizationId: 'crm-tool-basepoint-org',
     photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user_sarah_johnson'
   }
 ]

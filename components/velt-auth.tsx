@@ -34,8 +34,8 @@ export function VeltAuth() {
         await client.identify(user, { forceReset: userSwitchTrigger > 0 })
 
         // Set document for this CRM session
-        await client.setDocument('crm-dashboard', {
-          documentName: 'CRM Dashboard'
+        await client.setDocument('crm-dashboard-basepoint', {
+          documentName: 'CRM Dashboard Basepoint'
         })
 
         // Ensure Velt uses the same dark mode as the app
